@@ -1,0 +1,48 @@
+/* footer */
+.footer {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans HK', sans-serif;
+    background-color: #8c8279;
+    color: white;
+    padding: 40px 0;
+}
+.footer h5 {
+    color: rgb(255, 255, 255);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+.footer a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+.footer .social-icons a {
+    font-size: 1.8rem;
+    margin-right: 15px;
+    color: white;
+}
+.footer .social-icons a:hover {
+    color: #143146;
+}
+
+
+/* copyright */
+.copyright {
+    background-color: #1b3b4f; /* 深藍色背景 */
+    color: #ffffff; /* 白色文字 */
+    padding: 10px 0;
+    font-size: 0.9rem;
+}  
+.copyright a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 10px;
+}  
+.copyright a:hover {
+    text-decoration: underline;
+}
