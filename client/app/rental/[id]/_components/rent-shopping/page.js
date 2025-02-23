@@ -124,6 +124,7 @@ export default function RentShopping({ rental }) {
   const handleAddToCart = () => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('loginWithToken') : null
 
+    // 錯誤音效
     const falseSound = new Howl({
       src: ['/sounds/false.mp3'], // 音效來源 (支援多格式陣列)
       volume: 0.4, // 調整音量 (0.0 ~ 1.0)
@@ -136,7 +137,7 @@ export default function RentShopping({ rental }) {
           const popup = Swal.getPopup();
           if (popup) {
             const decorationBar = document.createElement('div');
-            decorationBar.className = 'auth-swal-decoration-bar'; // 添加裝飾條的類別
+            decorationBar.className = 'k-auth-swal-top-bar'; // 添加裝飾條的類別
             popup.prepend(decorationBar); // 在視窗頂部插入裝飾條
           }
           falseSound.play(); // 播放音效
@@ -146,16 +147,15 @@ export default function RentShopping({ rental }) {
         iconColor: '#fff',
         title: '請先登入',
         text: '登入後即可租借商品',
-        background: '#e58e41',
+        background: '#23425a',
         confirmButtonText: '前往登入',
         cancelButtonText: '稍後前往',
         showCancelButton: true,
         customClass: {
-          html: 'auth-swal-taxt',
-          icon: 'auth-swal-icon',
-          popup: 'auth-swal-position',
-          confirmButton: 'auth-swal-confirm-btn',
-          cancelButton: 'auth-swal-cancel-btn'
+          icon: 'k-auth-swal-icon',
+          popup: 'k-auth-swal-popup',
+          confirmButton: 'k-auth-swal-btn-1',
+          cancelButton: 'k-auth-swal-btn-2'
         },
         willClose: () => {
           falseSound.stop(); // 關閉視窗時停止音效 (適用於長音效)
@@ -175,7 +175,7 @@ export default function RentShopping({ rental }) {
           const popup = Swal.getPopup();
           if (popup) {
             const decorationBar = document.createElement('div');
-            decorationBar.className = 'auth-swal-decoration-bar'; // 添加裝飾條的類別
+            decorationBar.className = 'k-auth-swal-top-bar'; // 添加裝飾條的類別
             popup.prepend(decorationBar); // 在視窗頂部插入裝飾條
           }
           falseSound.play(); // 播放音效
@@ -186,12 +186,11 @@ export default function RentShopping({ rental }) {
         title: '請選擇租借日期',
         text: '開始與結束日期皆為必填項目',
         confirmButtonText: '前往填寫',
-        background: '#e58e41',
+        background: '#23425a',
         customClass: {
-          html: 'auth-swal-taxt',
-          icon: 'auth-swal-icon',
-          popup: 'auth-swal-position',
-          confirmButton: 'auth-swal-confirm-btn',
+          icon: 'k-auth-swal-icon',
+          popup: 'k-auth-swal-popup',
+          confirmButton: 'k-auth-swal-btn-1',
         },
         willClose: () => {
           falseSound.stop(); // 關閉視窗時停止音效 (適用於長音效)
@@ -241,23 +240,22 @@ export default function RentShopping({ rental }) {
       color: '#fff',
       icon: 'success',
       iconColor: '#fff',
-      iconHtml: `<img src="/images/icon/cart-2.svg" alt="加入購物車成功圖示" class="cart-swal-icon">`,
+      iconHtml: `<img src="/images/icon/cart-2.svg" alt="加入購物車成功圖示" class="k-swal-toast-icon">`,
       background: '#23425a',
-      html: `<strong>${rental.brand}${rental.name}</strong> <br>
-      租借時段為 ${formatDate(startDate)} ~ ${formatDate(endDate)}`,
+      html: `<strong>${rental?.brand !== null ? `${rental?.brand} ` : ''}${rental?.name}</strong><br>
+      租借時段 ${formatDate(startDate)} ~ ${formatDate(endDate)}`,
       showConfirmButton: false,
       timerProgressBar: true,
       showCloseButton: true,
       closeButtonHtml: '&times;', // 自訂關閉按鈕顯示的內容 (例如 "×" 符號)
-      timer: 2500,
+      timer: 2000,
       toast: true,
       position: 'top-end',
       customClass: {
-        html: 'cart-swal-taxt',
-        icon: 'cart-swal-icon',
-        popup: 'cart-swal-position',
-        closeButton: 'cart-swal-close-btn',
-        timerProgressBar: 'cart-swal-progress-bar'
+        icon: 'k-swal-toast-icon',
+        popup: 'k-swal-toast-popup',
+        closeButton: 'k-swal-toast-close',
+        timerProgressBar: 'k-swal-toast-progress'
       },
       willClose: () => {
         successSound.stop(); // 關閉視窗時停止音效 (適用於長音效)
@@ -267,7 +265,7 @@ export default function RentShopping({ rental }) {
 
   return (
     <div className="mt-3">
-      <h5 className="card-title fee-text">租借時段</h5>
+      <h5 className="card-title k-main-text">租借時段</h5>
       <div className="mt-2 m-3">
         <label htmlFor="startDate">開始日期</label>
         <input
@@ -281,7 +279,7 @@ export default function RentShopping({ rental }) {
         />
         {/* 提示禁止選擇星期日 */}
         {isSunday(startDate) && (
-          <div className="text-danger my-1">
+          <div className="k-warn-text  my-1">
             ⚠️ 週日恕無法配送 &gt; &lt; 請選其他日期
           </div>
         )}
@@ -297,18 +295,18 @@ export default function RentShopping({ rental }) {
         />
         {/* 提示禁止選擇星期日 */}
         {isSunday(endDate) && (
-          <div className="text-danger mt-1">
+          <div className="k-warn-text  mt-1">
             ⚠️ 週日恕無法取回 &gt; &lt; 請選其他日期
           </div>
         )}
       </div>
 
       <div className="d-flex justify-content-end m-1">
-        <button className="btn btn-primary btn-radius me-1">
+        <button className="btn btn-primary k-main-radius me-1">
           立即租借
         </button>
         <button
-          className="btn btn-outline-primary btn-radius"
+          className="btn btn-outline-primary k-main-radius"
           onClick={handleAddToCart}
           disabled={
             isSunday(startDate) ||

@@ -2,14 +2,15 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 export default function RentPagination({
   totalItems = 1,
   itemsPerPage = 1,
   onPageChange,
+  currentPage,
+  setCurrentPage
 }) {
-  const [currentPage, setCurrentPage] = useState(1)
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage))
 
   useEffect(() => {
@@ -22,13 +23,27 @@ export default function RentPagination({
     }
   }
 
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1)
+  // // 📌 **回到上一頁**
+  // const handlePrev = () => {
+  //   if (currentPage > 1) setCurrentPage((prev) => prev - 1)
+  // }
+
+  // // 📌 **跳到下一頁**
+  // const handleNext = () => {
+  //   if (currentPage < totalPages) setCurrentPage((prev) => prev + 1)
+  // }
+
+
+  // 📌 **跳轉到第一頁**
+  const handleFirstPage = () => {
+    if (currentPage !== 1) setCurrentPage(1)
   }
 
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1)
+  // 📌 **跳轉到最後一頁**
+  const handleLastPage = () => {
+    if (currentPage !== totalPages) setCurrentPage(totalPages)
   }
+
 
   // 📌 **計算顯示的頁碼範圍**
   let startPage = Math.max(1, currentPage - 2)
@@ -42,12 +57,14 @@ export default function RentPagination({
     }
   }
 
+
+
   return (
-    <div className="d-flex justify-content-center align-items-center mt-4 mb-1">
-      {/* 📌 上一頁按鈕 */}
+    <div className="d-flex justify-content-center align-items-center k-pagination mt-4 mb-1">
+      {/* 📌 跳轉到第一頁按鈕 */}
       <button
         className="page-link"
-        onClick={handlePrev}
+        onClick={handleFirstPage}
         disabled={currentPage === 1}
       >
         &laquo;
@@ -60,17 +77,17 @@ export default function RentPagination({
       ).map((page) => (
         <button
           key={page}
-          className={`page-link ${currentPage === page ? 'active-page' : ''}`}
+          className={`page-link ${currentPage === page ? 'active' : ''}`}
           onClick={() => handlePageClick(page)}
         >
           {page}
         </button>
       ))}
 
-      {/* 📌 下一頁按鈕 */}
+      {/* 📌 跳轉到最後一頁按鈕 */}
       <button
         className="page-link"
-        onClick={handleNext}
+        onClick={handleLastPage}
         disabled={currentPage === totalPages}
       >
         &raquo;

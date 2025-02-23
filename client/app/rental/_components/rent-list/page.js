@@ -29,6 +29,7 @@ export default function RentList() {
   // 📌 **初始化時載入資料**
   useEffect(() => {
     fetchData()
+    setCurrentPage(1) // 每次搜尋或篩選後自動跳回第一頁
   }, [filters, searchQuery])
 
   // 📌 **當 `filteredRentals` 或 `itemsPerPage` 變更時，重新計算 `totalPages`**
@@ -39,7 +40,11 @@ export default function RentList() {
   // 📌 **RWD 視窗大小變更時，調整 `itemsPerPage`**
   useEffect(() => {
     const updateItemsPerPage = () => {
+      // 📌 **計算當前頁面的第一個商品索引**，確保視窗變更後能保持當前商品可見。
+      const indexOfFirstItem = (currentPage - 1) * itemsPerPage
+      // 📌 **根據視窗大小動態設定 `itemsPerPage`**，以適應 RWD 的顯示需求。
       let newItemsPerPage
+
       if (window.innerWidth < 768) {
         newItemsPerPage = 6
       } else if (window.innerWidth < 992) {
@@ -48,12 +53,18 @@ export default function RentList() {
         newItemsPerPage = 12
       }
       setItemsPerPage(newItemsPerPage)
+
+      // 📌 **計算新的頁碼**，根據第一個商品的索引重新定位頁面，避免頁數錯位。
+      const newPage = Math.floor(indexOfFirstItem / newItemsPerPage) + 1
+      setCurrentPage(newPage)
     }
 
     updateItemsPerPage() // ✅ 初始化時立即執行
+    // 📌 **監聽視窗大小變更事件**，在視窗大小變更時自動調整分頁顯示數量。
     window.addEventListener('resize', updateItemsPerPage)
+    // 📌 **清除事件監聽器**，避免組件卸載時潛在的內存洩漏 (memory leak)。
     return () => window.removeEventListener('resize', updateItemsPerPage)
-  }, [])
+  }, [currentPage, itemsPerPage])
 
   // 📌 **從 API 獲取租借商品和標籤**
   const fetchData = async () => {
@@ -142,6 +153,8 @@ export default function RentList() {
           totalItems={filteredRentals.length}
           itemsPerPage={itemsPerPage}
           onPageChange={setCurrentPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       </main>
     </div>

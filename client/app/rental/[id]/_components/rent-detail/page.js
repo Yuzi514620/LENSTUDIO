@@ -52,7 +52,7 @@ export default function RentDetail() {
             <h2>
               {rental.brand || '無資料'} {rental.name || '無資料'}
             </h2>
-            <p className="fee-text h4 ms-2 mt-2">
+            <p className="k-main-text h4 ms-2 mt-2">
               NT$ {rental.fee ? rental.fee.toLocaleString() : '無資料'}/ 天
             </p>
             <RentTabs rental={rental} />

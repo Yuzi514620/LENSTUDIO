@@ -1,3 +1,4 @@
+/* BS 預設顏色 死亡全域修正 */
 .btn-primary {
   color: #fff;
   background: #23425a;
@@ -11,7 +12,6 @@
     border-color: #143146;
   }
 }
-
 .btn-outline-primary {
   color: #23425a;
   border-color: #23425a;
@@ -25,124 +25,244 @@
     border-color: #143146;
   }
 }
-
+// 手風琴 背景
 .accordion-button {
   background-color: #143146 !important;
   color: #fff !important;
   border: none !important;
   box-shadow: none !important;
 }
+// 手風琴 收放按鈕
 .accordion-button::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FFFFFF'%3E%3Cpath fill-rule='evenodd' d='M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E") !important;
 }
-
+// 手風琴 預設按鈕
 .accordion-button:not(.collapsed) {
   background-color: #23425a !important;
   color: #f6f7f8 !important;
   border: none !important;
   box-shadow: none !important;
 }
-
+// 輸入框
+.form-control:focus {
+  border: 1px solid #ced4da;
+  box-shadow: none;
+}
 // 排序框
 .form-select:focus {
   border: 1px solid #ced4da;
   box-shadow: none;
 }
 
-// 搜尋框
-.form-control:focus {
-  border: 1px solid #ced4da;
-  box-shadow: none;
+/* 全頁面 */
+.k-body {
+  background-color: #f6f7f9;
+  color: #252525;
+  a {
+    text-decoration: none;
+  }
 }
-
-.btn-sm-radius {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+// 文字顏色
+.k-main-text {
+  color: #23425a;
 }
-
-.breadcrumb a {
+.k-warn-text {
+  color: #e58e41;
+}
+.k-status-text {
+  color: #d0b088;
+}
+.k-aux-color-1 {
+  color: #8f8f8f;
+}
+.k-aux-color-2 {
+  color: #7e7267;
+}
+// 麵包屑
+.k-breadcrumb a {
   color: #23425a;
 }
 
-// 標籤
-.tag-bg {
+/* 左半邊 */
+// 商品標籤
+.k-main-bg {
+  background-color: #23425a;
+}
+.k-tag-bg {
   color: #fff;
   background-color: #23425a;
   &:hover,
   &:active,
+  &:active:focus,
   &:active:hover {
     background: #143146;
   }
 }
 
-.type-bg {
-  color: #fff;
-  background-color: #23425a;
-}
-
-// 文字顏色
-
-.brand-text {
-  color: #8f8f8f;
-}
-
-.state-text {
-  color: #d0b088;
-}
-
-.fee2-text {
-  color: #7e7267;
-}
-
-body {
-  color: #252525;
-  background-color: #f6f7f9;
-}
-
-a {
-  text-decoration: none;
-}
-
-/* 商品卡片樣式 */
-.p-card {
+/* 右半邊 */
+// 商品卡片
+.k-card {
   background: #fff;
   transition: transform 0.3s ease-in-out;
-
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
   &:hover {
     transform: scale(1.03);
     box-shadow: inset 0 0 0 1px #23425a;
   }
-
-  img {
-    object-fit: cover;
+}
+// 商品類別
+.k-type-bg {
+  color: #fff;
+  background-color: #23425a;
+}
+// 商品收藏
+.k-favorite-icon {
+  cursor: pointer;
+  border: none;
+  background: none;
+  z-index: 99;
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
   }
 }
-
-// 分頁
-.page-link {
-  width: 50px;
-  text-align: center;
-  border: none !important;
-  border-radius: 0 !important;
-  color: #807871 !important;
-  border-bottom: 1px solid #807871 !important;
-  background-color: transparent !important;
-  padding: 0 0 8px;
+// 分頁按鈕
+.k-pagination {
+  .page-link {
+    width: 50px;
+    text-align: center;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #807871 !important;
+    border-bottom: 1px solid #807871 !important;
+    background-color: transparent !important;
+    padding: 0 0 8px;
+    &:hover,
+    &:active,
+    &:active:focus,
+    &:active:hover {
+      box-shadow: none;
+      color: #143146 !important;
+      border-bottom: 2px solid #23425a !important;
+      background-color: transparent !important;
+      transform: translateY(0.5);
+    }
+  }
+  .active {
+    color: #23425a !important;
+    font-weight: bold;
+    border-bottom: 2px solid #23425a !important;
+    transform: translateY(0.5);
+    cursor: default;
+  }
+}
+// 彈窗(auth)
+.k-auth-swal-top-bar {
+  width: 100%;
+  height: 34px; // 裝飾條的高度
+  background: repeating-linear-gradient(
+    45deg,
+    #fff,
+    #fff 24px,
+    #5292c5 10px,
+    #5292c5 48px
+  );
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+.k-auth-swal-icon {
+  top: 10px;
+}
+.k-auth-swal-popup {
+  padding-top: 10px !important; // 預留空間給裝飾條
+  overflow: hidden; // 確保裝飾條不會超出邊界
+}
+.k-auth-swal-btn-1 {
+  background-color: #5292c5;
+  border-radius: 50px;
+}
+.k-auth-swal-btn-2 {
+  background-color: #807871;
+  border-radius: 50px;
+}
+// 微調彈窗(error)
+.k-error-swal-top-bar {
+  width: 100%;
+  height: 34px; // 裝飾條的高度
+  background: repeating-linear-gradient(
+    45deg,
+    #fff,
+    #fff 24px,
+    #e58e41 10px,
+    #e58e41 48px
+  );
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+.k-error-swal-icon {
+  top: 10px;
+}
+.k-error-swal-popup {
+  padding-top: 10px !important; // 預留空間給裝飾條
+  overflow: hidden; // 確保裝飾條不會超出邊界
+}
+.k-error-swal-btn {
+  background-color: #e58e41;
+  border-radius: 50px;
+}
+// 彈窗吐司
+@keyframes k-toast-bounce {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(0deg);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.k-swal-toast-icon {
+  border: none;
+  color: #fff;
+  right: -3px;
+  width: 40px;
+  height: 40px;
+  animation: k-toast-bounce 1s ease forwards;
+  strong {
+    color: #f1cf99;
+  }
+}
+.k-swal-toast-popup {
+  padding-top: 8px !important;
+  top: 82px !important;
+}
+.k-swal-toast-close {
+  color: #fff;
+  font-size: 24px;
+  transition: transform 0.3s;
   &:hover,
   &:active,
+  &:active:focus,
   &:active:hover {
-    box-shadow: none;
-    color: #143146 !important;
-    border-bottom: 2px solid #23425a !important;
-    background-color: transparent !important;
-    transform: translateY(0.5);
+    color: #e58e41;
   }
 }
-.active-page {
-  color: #23425a !important;
-  font-weight: bold;
-  border-bottom: 2px solid #23425a !important;
-  transform: translateY(0.5);
-  cursor: default;
+.k-swal-toast-progress {
+  background: linear-gradient(90deg, #e58e41, #f1cf99);
+  height: 10px;
+  border-radius: 5px;
 }

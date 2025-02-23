@@ -11,16 +11,16 @@ export default function RentTabs({ rental }) {
   return (
     <div className="mt-1">
       {/* Tab 選單 */}
-      <div className="d-flex">
+      <div className="d-flex k-tabs">
         <button
-          className={`btn btn-primary btn-tab-radius me-1 ${activeTab === 'rent' ? 'btn-active' : ''
+          className={`btn btn-primary tab-radius me-1 ${activeTab === 'rent' ? 'active' : ''
             }`}
           onClick={() => setActiveTab('rent')}
         >
           租借內容
         </button>
         <button
-          className={`btn btn-primary btn-tab-radius ${activeTab === 'spec' ? 'btn-active' : ''
+          className={`btn btn-primary tab-radius ${activeTab === 'spec' ? 'active' : ''
             }`}
           onClick={() => setActiveTab('spec')}
         >
@@ -34,8 +34,8 @@ export default function RentTabs({ rental }) {
           <div className="card card-radius px-2">
             <div className="card-body">
               {/* 商品配件 (來自 API: rental.append) */}
-              <h5 className="card-title fee-text">商品配件</h5>
-              <div className="append-grid">
+              <h5 className="card-title k-main-text">商品配件</h5>
+              <div className="k-append-grid">
                 {rental.append
                   ? rental.append
                     .split('\n')
@@ -45,9 +45,9 @@ export default function RentTabs({ rental }) {
                       return acc
                     }, [])
                     .map((pair, rowIndex) => (
-                      <div key={rowIndex} className="append-row">
+                      <div key={rowIndex} className="k-append-row">
                         {pair.map((item, colIndex) => (
-                          <span key={colIndex} className="append-item">
+                          <span key={colIndex} className="k-append-item">
                             {item}
                           </span>
                         ))}
@@ -64,7 +64,7 @@ export default function RentTabs({ rental }) {
           <div className="card card-radius p-3">
             {/* 產品規格 (根據類別不同顯示不同資訊) */}
             <table className="table">
-              <tbody>
+              <tbody className='k-tbody'>
                 <tr>
                   <th className="ps-3">尺寸</th>
                   <td>{rental.dimension || '無資料'}</td>

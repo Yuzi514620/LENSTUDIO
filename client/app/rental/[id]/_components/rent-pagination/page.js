@@ -40,7 +40,7 @@ export default function RentPagination({
   return (
     <div className="d-flex gap-2">
       <button
-        className="btn btn-primary btn-sm btn-sm-radius"
+        className="btn btn-primary btn-sm k-recommend"
         onClick={handlePrev}
         disabled={currentIndex === 0}
       >
@@ -50,7 +50,7 @@ export default function RentPagination({
         <span className="visually-hidden">往前一個 Previous</span>
       </button>
       <button
-        className="btn btn-primary btn-sm btn-sm-radius"
+        className="btn btn-primary btn-sm k-recommend"
         onClick={handleNext}
         disabled={currentIndex + itemsPerPage >= totalItems}
       >

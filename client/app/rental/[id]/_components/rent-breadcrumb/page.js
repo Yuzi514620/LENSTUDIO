@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function RentBreadcrumb() {
   return (
-    <nav aria-label="breadcrumb" className="breadcrumb-container">
+    <nav aria-label="breadcrumb k-breadcrumb" className="breadcrumb-container">
       <ol className="breadcrumb">
         <li className="breadcrumb-item">
           <Link href="/">首頁</Link>

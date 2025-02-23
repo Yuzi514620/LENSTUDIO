@@ -273,7 +273,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// ✅ 新增收藏
+// ✅ 新增收藏 (允許多商品收藏)
 router.post('/collection', auth, async (req, res) => {
   try {
     const { rent_id } = req.body
@@ -283,15 +283,6 @@ router.post('/collection', auth, async (req, res) => {
       return res.status(400).json({ success: false, error: 'rent_id 為必填項目' })
     }
 
-    const [existing] = await pool.query(
-      'SELECT * FROM collection WHERE user_id = ? AND rent_id = ?',
-      [user_id, rent_id]
-    )
-
-    if (existing.length > 0) {
-      return res.status(400).json({ success: false, message: '該商品已經收藏' })
-    }
-
     await pool.query(
       'INSERT INTO collection (user_id, rent_id, created_at) VALUES (?, ?, NOW())',
       [user_id, rent_id]
@@ -299,6 +290,9 @@ router.post('/collection', auth, async (req, res) => {
 
     res.json({ success: true, message: '已成功收藏租借商品' })
   } catch (error) {
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(400).json({ success: false, message: '該商品已經收藏' })
+    }
     console.error('新增收藏錯誤:', error)
     res.status(500).json({ success: false, error: '伺服器錯誤' })
   }

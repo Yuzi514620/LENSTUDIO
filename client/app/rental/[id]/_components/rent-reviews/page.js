@@ -60,7 +60,7 @@ export default function RentReviews() {
     <div className="mt-4">
       <h5>評價</h5>
       <div className="d-flex align-items-center">
-        <span className="star-color">★★★★★</span>
+        <span className="k-warn-text">★★★★★</span>
         <span className="ms-2">4.0 (25 條評論)</span>
       </div>
       <div className="mt-3" id="reviewContainer">
@@ -83,7 +83,7 @@ export default function RentReviews() {
                   </span>
                 ))}
               </p>
-              <span className="star-color">
+              <span className="k-warn-text">
                 {'★'.repeat(review.rating)}
                 {'☆'.repeat(5 - review.rating)}
               </span>
@@ -91,7 +91,7 @@ export default function RentReviews() {
           </div>
         ))}
         <div className="d-flex justify-content-end">
-          <button className="btn btn-outline-warning btn-radius" onClick={showMore}>
+          <button className="btn btn-outline-warning k-main-radius" onClick={showMore}>
             顯示更多
           </button>
         </div>

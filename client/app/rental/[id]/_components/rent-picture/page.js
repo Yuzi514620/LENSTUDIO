@@ -46,21 +46,19 @@ export default function RentPicture({ images = [] }) {
   // 🟢 監聽滾動，根據父容器 (col-lg-5) 與頁尾動態切換 sticky 與 relative
   useEffect(() => {
     const handleScroll = () => {
-      const pictureSection = document.querySelector('.rent-picture-container')
-      const contentSection = document.querySelector('.col-lg-5') // 抓取父元件的 col-lg-5
-      const footerSection = document.querySelector('footer')
+      const pictureSection = document.querySelector('.k-picture-container')
+      const contentSection = document.querySelector('.col-lg-5') // 抓父元件 col-lg-5
 
-      if (!pictureSection || !contentSection || !footerSection) return
+      if (!pictureSection || !contentSection) return
 
       const pictureRect = pictureSection.getBoundingClientRect()
       const contentRect = contentSection.getBoundingClientRect()
-      const footerRect = footerSection.getBoundingClientRect()
 
       const isLargeScreen = window.innerWidth >= 992
 
       if (isLargeScreen) {
         // 🟢 Sticky 由右側內容 (col-lg-5) 高度控制，避免過早變成 relative
-        const shouldUseSticky = pictureRect.bottom <= contentRect.bottom && pictureRect.bottom < footerRect.top - 20
+        const shouldUseSticky = pictureRect.bottom <= contentRect.bottom && pictureRect.bottom
 
         // 🟢 讓圖片區域高度跟隨右側內容變化
         pictureSection.style.height = `${contentRect.height - 28}px`
@@ -87,10 +85,10 @@ export default function RentPicture({ images = [] }) {
 
 
   return (
-    <div className={`rent-picture-container ${useSticky ? 'sticky' : 'relative'}`}>
-      <div className="rent-picture-fixed mb-4">
+    <div className={`k-picture-container ${useSticky ? 'sticky' : 'relative'}`}>
+      <div className="k-picture-sticky mb-4">
         {/* 主圖顯示區域 */}
-        <div className="text-center p-card2 main-image-container">
+        <div className="text-center k-picture-bg">
           <img
             src={mainImage}
             alt="Product Image"
@@ -99,13 +97,13 @@ export default function RentPicture({ images = [] }) {
         </div>
 
         {/* 縮圖輪播區域 */}
-        <div className="thumbnails-container mt-3 d-flex align-items-center ">
+        <div className="k-thumbnails-container mt-3 d-flex align-items-center">
           <Swiper spaceBetween={10} slidesPerView={3}>
             {finalImages.map((img, index) => (
               <SwiperSlide key={index}>
                 {/* 縮圖，點擊後切換主圖 */}
                 <div
-                  className="thumbnail p-card2"
+                  className="k-thumbnail k-picture-bg"
                   onClick={() => handleThumbnailClick(img)}
                 >
                   <img
@@ -122,7 +120,7 @@ export default function RentPicture({ images = [] }) {
               Array.from({ length: missingImages }).map((_, index) => (
                 <SwiperSlide key={`empty-${index}`} className="empty-slide">
                   <div
-                    className="thumbnail p-card2 placeholder-slide"
+                    className="k-thumbnail k-picture-bg"
                     aria-hidden="true"
                   ></div>
                 </SwiperSlide>

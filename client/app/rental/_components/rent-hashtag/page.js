@@ -35,7 +35,7 @@ export default function RentHashtag({ hashtags = [], onHashtagClick }) {
         {visibleTags.map((tag) => (
           <span
             key={tag.id}
-            className="badge tag-bg me-1"
+            className="badge k-tag-bg me-1"
             style={{ cursor: 'pointer' }}
             onClick={() => onHashtagClick(tag.tags)}
           >
@@ -46,7 +46,7 @@ export default function RentHashtag({ hashtags = [], onHashtagClick }) {
         {/* 📌 **當標籤超過 4 個時，顯示 `...` 按鈕** */}
         {hiddenTags.length > 0 && (
           <span
-            className="badge tag-bg me-1"
+            className="badge k-tag-bg me-1"
             style={{ cursor: 'pointer' }}
             onClick={() => setShowModal(true)}
           >
@@ -71,7 +71,7 @@ export default function RentHashtag({ hashtags = [], onHashtagClick }) {
             {hashtags.map((tag) => (
               <span
                 key={tag.id}
-                className="badge tag-bg m-1 d-flex align-items-center justify-content-center"
+                className="badge k-tag-bg m-1 d-flex align-items-center justify-content-center"
                 style={{
                   cursor: 'pointer',
                   width: 'calc(25% - 8px)', // 讓每行最多 4 個，留點間距

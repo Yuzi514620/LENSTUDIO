@@ -5,7 +5,7 @@ export default function RentHashtags({ hashtags = [] }) {
     <div className="mt-1 mb-2">
       {hashtags.length > 0 ? (
         hashtags.map((tag, index) => (
-          <span key={index} className="badge tag-bg me-1">
+          <span key={index} className="badge k-tag-bg me-1">
             {tag}
           </span>
         ))
