@@ -150,19 +150,26 @@
   padding: 10px;
 }
 
-.cke_chrome{
-    border-radius: 10px;
-    border: 1px solid #695656;
-    border-width: thin;        
+.ck-editor__editable {
+  min-height: 500px !important;  /* ✅ 設定 CKEditor 內容區域最小高度 */
+  max-height: 800px !important;  /* ✅ 避免內容過長 */
+  overflow-y: auto !important;  /* ✅ 確保內容超出時可以滾動 */
 }
 
-.cke_top{
-    border-radius: 10px 10px 0px 0px
+
+:global(.ck.ck-toolbar) {
+  border-radius: 20px 20px 0 0 !important; /* ✅ 讓工具列的上方圓角生效 */
 }
 
-.cke_bottom{
-    border-radius: 0px 0px 10px 10px
+
+
+:global(.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable),
+:global(.ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners) {
+  border-radius: 0 0 20px 20px  !important; /* ✅ 讓邊角變圓 */
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
+
 
 .save-btn {
   border: none;

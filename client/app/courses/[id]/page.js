@@ -66,7 +66,7 @@ export default function CourseDetailPage() {
               </div>
               <div className="row">
                 <div className="col-12 col-xl-8">
-                  <CourseContent course={course} />
+                  <CourseContent content={course.content} />
                   <TeacherInfo teacherId={course.teacher_id} course={course} />
                   <CourseRating />
                 </div>

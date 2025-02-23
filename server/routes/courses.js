@@ -67,12 +67,12 @@ router.get('/', async (req, res) => {
       if (sort === 'high-price') query += ` ORDER BY c.sale_price DESC`
     }
 
-    console.log('📢 執行的 SQL：', query, params)
+   
 
     const result = await pool.query(query, params)
     const courses = result[0]
 
-    console.log('✅ 從資料庫獲取的課程：', courses)
+  
     res.json(courses)
   } catch (error) {
     console.error('❌ 取得課程失敗:', error.stack)
@@ -157,5 +157,34 @@ router.get('/related/:category', async (req, res) => {
     res.status(500).json({ error: '無法獲取相關課程' })
   }
 })
+
+// 編輯課程資訊
+router.post("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log("🔍 收到的 `id`:", id);
+  console.log("🔍 收到的 `body`:", req.body);
+
+  const { title, description, category, original_price, sale_price, image_url, content } = req.body;
+
+  try {
+    const [result] = await pool.execute(
+      "UPDATE courses SET title = ?, description = ?, category = ?, original_price = ?, sale_price = ?, image_url = ?, content = ?, updated_at = NOW() WHERE id = ?",
+      [title, description, category, original_price, sale_price, image_url, content, id]
+    );
+
+    console.log("🔍 SQL 更新結果:", result);
+
+    if (result.affectedRows === 0) {
+      console.log("❌ 找不到課程 ID:", id);
+      return res.status(404).json({ message: "課程不存在" });
+    }
+
+    res.json({ message: "課程內容更新成功", courseId: id });
+  } catch (error) {
+    console.error("❌ 更新課程失敗:", error);
+    res.status(500).json({ message: "伺服器錯誤" });
+  }
+});
+
 
 export default router

@@ -47,7 +47,7 @@ router.get('/me', async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
-    console.log('🔹 Token 解析結果:', decoded)
+    
 
     if (!decoded) {
       console.log('❌ Token 解析失敗')
@@ -65,7 +65,6 @@ router.get('/me', async (req, res) => {
     `
     const [rows] = await pool.query(sql, [decoded.id])
 
-    console.log('📌 SQL 查詢結果:', rows)
 
     // 🔴 **如果找不到講師資料**
     if (rows.length === 0) {
@@ -75,7 +74,7 @@ router.get('/me', async (req, res) => {
 
     // ✅ 取得講師資料
     const teacher = rows[0]
-    console.log(`✅ 成功獲取講師資料:`, teacher)
+
 
     // 🔹 回傳完整的講師資訊給前端
     res.json({
@@ -123,16 +122,7 @@ router.put('/me', authenticate, async (req, res) => {
       SET name = ?, email = ?, bio = ?, website = ?, facebook = ?, instagram = ?, youtube = ?
       WHERE user_id = ?
     `
-    console.log('SQL:', updateTeacherSql, [
-      name,
-      email,
-      bio,
-      website,
-      facebook,
-      instagram,
-      youtube,
-      userId,
-    ])
+
     await connection.execute(updateTeacherSql, [
       name,
       email,
@@ -249,7 +239,7 @@ router.get('/me/courses', async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
-    console.log('🔹 Token 解析結果:', decoded)
+  
 
     // **2️⃣ 檢查是否為老師**
     if (!decoded || decoded.level !== 1) {
@@ -289,7 +279,6 @@ router.get('/me/courses', async (req, res) => {
 
     const [courses] = await pool.query(sqlCourses, [teacherId])
 
-    console.log(`📌 查詢結果，共 ${courses.length} 堂課`)
 
     // **5️⃣ 如果沒有課程，回傳空陣列**
     if (courses.length === 0) {

@@ -1,22 +1,46 @@
-:root {
+:root { 
+
+        --primary-color: #143146;
+        --primary-color-med: #23425a;
+        --primary-color-lig: #5292c5;
+        --warning-color: #e58e41;
+        --warning-color-dark: #ca6d1b;
+        --secondary-color-dark: #807871;
+        --secondary-color-med: #d0b088;
+        --secondary-color-lig: #f1cf99;
+        --secondary-color-lig2: #e8e3d7;
+        --bg-color-gray: #f5f5f5;
+        --black: #1b1b1b;
+        --white: #ffffff;
+        --line-color-gray: #979797;
+        --line-color-gray-light: #c9c9c9;
+        --line-color-gray-light2: #ececec;
+        --gray--50: #dbdbdb;
+        --gray--100: #d4d4d4;
+        --gray--200: #afafaf;
+        --gray--300: #979797;
+        --gray--400: #7e7e7e;
+        --gray--500: #666666;
+        --box-shadow: 0px 0px 10px rgba(32, 32, 32, 0.15);
+      
     /* Overrides the border radius setting in the theme. */
-    --ck-border-radius: 4px;
+    --ck-border-radius: 20px 20px 0 0;
 
     /* Overrides the default font size in the theme. */
     --ck-font-size-base: 14px;
 
     /* Helper variables to avoid duplication in the colors. */
-    --ck-custom-background: hsl(270, 1%, 29%);
-    --ck-custom-foreground: hsl(255, 3%, 18%);
-    --ck-custom-border: hsl(300, 1%, 22%);
+    --ck-custom-background: var(--secondary-color-dark) !important;
+    --ck-custom-foreground: hsl(0, 0%, 24%);
+    --ck-custom-border: var(--primary-color);
     --ck-custom-white: hsl(0, 0%, 100%);
 
     /* -- Overrides generic colors. ------------------------------------------------------------- */
 
     --ck-color-base-foreground: var(--ck-custom-background);
-    --ck-color-focus-border: hsl(208, 90%, 62%);
-    --ck-color-text: hsl(0, 0%, 98%);
-    --ck-color-shadow-drop: hsla(0, 0%, 0%, 0.2);
+    --ck-color-focus-border: var(--);
+    --ck-color-text: var(--secondary-color-lig2);
+    --ck-color-shadow-drop: hsla(0, 0%, 33%, 0.2);
     --ck-color-shadow-inner: hsla(0, 0%, 0%, 0.1);
 
     /* -- Overrides the default .ck-button class colors. ---------------------------------------- */
@@ -61,11 +85,11 @@
     /* -- Overrides the default .ck-input class colors. ----------------------------------------- */
 
     --ck-color-input-background: var(--ck-custom-background);
-    --ck-color-input-border: hsl(257, 3%, 43%);
+    --ck-color-input-border: white;
     --ck-color-input-text: hsl(0, 0%, 98%);
-    --ck-color-input-disabled-background: hsl(255, 4%, 21%);
+    --ck-color-input-disabled-background: hsl(0, 0%, 62%);
     --ck-color-input-disabled-border: hsl(250, 3%, 38%);
-    --ck-color-input-disabled-text: hsl(0, 0%, 78%);
+    --ck-color-input-disabled-text: hsl(0, 0%, 77%);
 
     /* -- Overrides the default .ck-labeled-field-view class colors. ---------------------------- */
 
@@ -102,10 +126,10 @@
     /* -- Overrides the default colors used by the ckeditor5-widget package. -------------------- */
 
     --ck-color-widget-blurred-border: hsl(0, 0%, 87%);
-    --ck-color-widget-hover-border: hsl(43, 100%, 68%);
+    --ck-color-widget-hover-border: var(--warning-color);
     --ck-color-widget-editable-focus-background: var(--ck-custom-white);
 
     /* -- Overrides the default colors used by the ckeditor5-link package. ---------------------- */
 
-    --ck-color-link-default: hsl(190, 100%, 75%);
+    --ck-color-link-default: var(--secondary-color-lig);
 }

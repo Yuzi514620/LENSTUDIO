@@ -8,14 +8,17 @@
   overflow: hidden; /* 隱藏超出部分 */
   transition: max-height 0.5s ease-in-out; /* 添加過渡效果 */
 }
+
 .content-text h3 {
   font-size: 1.2rem;
   color: var(--primary-color);
   margin-top: 10px;
+  font-weight: 600;
 }
 
 .content-text img {
   width: 100%;
+  height: auto;
   margin: 20px 0;
 }
 

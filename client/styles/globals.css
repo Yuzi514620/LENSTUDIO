@@ -24,7 +24,12 @@
   --gray--400: #7e7e7e;
   --gray--500: #666666;
   --box-shadow: 0px 0px 10px rgba(32, 32, 32, 0.15);
+
+  /* ckeditor */
+  --ck-border-radius: 20px 20px 0 0 !important;
+  --ck-content-min-height: 500px !important;
 }
+
 
 
 html, body {
@@ -610,3 +615,13 @@ footer-title {
 }
 
 
+/* ckeditor */
+.ck-editor__editable_inline {
+  min-height:650px;
+}
+
+.ck-editor__editable h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
