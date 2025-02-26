@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react'
 import styles from './index.module.scss'
 import Link from 'next/link'
+import { FaRegHeart, FaHeart } from 'react-icons/fa6'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 // 假設 currentUserId 可從某處獲取，這裡暫時硬編碼為 1
 const currentUserId = 1
@@ -20,6 +23,61 @@ export default function TagLikeShareBtnIndex({ articleId }) {
   const [showSharePopup, setShowSharePopup] = useState(false)
   const [copyHovered, setCopyHovered] = useState(false)
   const [copyActive, setCopyActive] = useState(false)
+
+  // 新增收藏功能相關狀態
+  const [token, setToken] = useState(null)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [favoriteHovered, setFavoriteHovered] = useState(false)
+
+  // 在組件載入時獲取 token
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedToken = localStorage.getItem('loginWithToken')
+      setToken(storedToken)
+    }
+  }, [])
+
+  // 獲取文章收藏狀態
+  useEffect(() => {
+    if (!token || !articleId) return;
+
+    const checkFavoriteStatus = async () => {
+      try {
+        // 修改：增加錯誤處理和降級策略
+        try {
+          const res = await fetch(
+            `http://localhost:8000/api/articles/collection/${articleId}`,
+            {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include', // 確保包含身份驗證憑證
+            }
+          )
+
+          if (res.ok) {
+            const data = await res.json()
+            setIsFavorite(!!data.isFavorite)
+          } else {
+            console.warn('收藏狀態獲取失敗，使用預設值')
+            // 失敗時使用預設值，不影響使用者體驗
+            setIsFavorite(false)
+          }
+        } catch (error) {
+          console.error('收藏狀態獲取錯誤:', error)
+          // 出錯時使用預設值，不影響使用者體驗
+          setIsFavorite(false)
+        }
+      } catch (error) {
+        console.error('無法確認收藏狀態:', error)
+        // 不拋出錯誤，只記錄日誌
+      }
+    }
+
+    checkFavoriteStatus()
+  }, [articleId, token])
 
   useEffect(() => {
     // 取得標籤
@@ -83,6 +141,62 @@ export default function TagLikeShareBtnIndex({ articleId }) {
     }
   }
 
+  // 處理收藏點擊
+  const handleFavoriteClick = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!token) {
+      toast.warn('請先登入，即可收藏文章！', {
+        position: 'top-right',
+        autoClose: 3000,
+      })
+      return
+    }
+
+    try {
+      const method = isFavorite ? 'DELETE' : 'POST'
+      let url = 'http://localhost:8000/api/articles/collection'
+
+      if (method === 'DELETE') {
+        url = `http://localhost:8000/api/articles/collection/${articleId}`
+      }
+
+      // 先更新UI狀態，提供即時反饋
+      setIsFavorite(!isFavorite)
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // 確保包含身份驗證憑證
+        body:
+          method === 'POST' ? JSON.stringify({ article_id: articleId }) : null,
+      })
+
+      if (!res.ok) {
+        // 如果API調用失敗，恢復原始狀態
+        setIsFavorite(isFavorite)
+        const errorText = await res.text()
+        throw new Error(errorText || '收藏操作失敗')
+      }
+
+      toast.success(isFavorite ? '已取消收藏！' : '成功加入收藏！', {
+        position: 'top-right',
+        autoClose: 2000,
+      })
+    } catch (error) {
+      console.error('收藏錯誤:', error)
+      // 已經在上面恢復了狀態，只需顯示錯誤訊息
+      toast.error('操作失敗：' + (error.message || '發生錯誤，請稍後再試'), {
+        position: 'top-right',
+        autoClose: 3000,
+      })
+    }
+  }
+
   // 分享按鈕點擊事件：彈出一個置中 overlay 並提供複製網址功能
   const handleShare = () => {
     setShowSharePopup(true)
@@ -119,8 +233,8 @@ export default function TagLikeShareBtnIndex({ articleId }) {
                 isLiked
                   ? '/images/article/thumb-up-red.svg'
                   : isHovered
-                  ? '/images/article/thumb-up-gray.svg'
-                  : '/images/article/thumb-up-black.svg'
+                    ? '/images/article/thumb-up-gray.svg'
+                    : '/images/article/thumb-up-black.svg'
               }
               className={`me-1 ${styles['y-like-comment-share-fav-pc']}`}
               style={{
@@ -138,8 +252,8 @@ export default function TagLikeShareBtnIndex({ articleId }) {
                 isLiked
                   ? '/images/article/thumb-up-red.svg'
                   : isHovered
-                  ? '/images/article/thumb-up-gray.svg'
-                  : '/images/article/thumb-up-black.svg'
+                    ? '/images/article/thumb-up-gray.svg'
+                    : '/images/article/thumb-up-black.svg'
               }
               className={`me-1 ${styles['y-like-comment-share-fav-mb']}`}
               style={{
@@ -168,8 +282,8 @@ export default function TagLikeShareBtnIndex({ articleId }) {
                 shareActive
                   ? '/images/article/share-active.svg'
                   : shareHovered
-                  ? '/images/article/share-hover.svg'
-                  : '/images/article/share-origin.svg'
+                    ? '/images/article/share-hover.svg'
+                    : '/images/article/share-origin.svg'
               }
               className={`me-1 ${styles['y-like-comment-share-fav-pc']}`}
               alt="Share"
@@ -179,26 +293,30 @@ export default function TagLikeShareBtnIndex({ articleId }) {
                 shareActive
                   ? '/images/article/share-active.svg'
                   : shareHovered
-                  ? '/images/article/share-hover.svg'
-                  : '/images/article/share-origin.svg'
+                    ? '/images/article/share-hover.svg'
+                    : '/images/article/share-origin.svg'
               }
               className={`me-1 ${styles['y-like-comment-share-fav-mb']}`}
               alt="Share"
             />
           </button>
 
-          {/* Favourite 按鈕 */}
-          <button className="py-sm-2 px-sm-2 d-flex align-items-center fw-medium rounded-pill">
-            <img
-              src="/images/article/favourite.svg"
-              className={`me-1 ${styles['y-like-comment-share-fav-pc']}`}
-              alt="Favorite"
-            />
-            <img
-              src="/images/article/favourite.svg"
-              className={`me-1 ${styles['y-like-comment-share-fav-mb']}`}
-              alt="Favorite"
-            />
+          {/* 修改後的收藏按鈕，使用 FavoriteButtonG 的樣式 */}
+          <button
+            onClick={handleFavoriteClick}
+            className={`${styles['favorite-btn']} ${styles['article-favorite-btn']}`}
+            onMouseEnter={() => setFavoriteHovered(true)}
+            onMouseLeave={() => setFavoriteHovered(false)}
+          >
+            {isFavorite ? (
+              <FaHeart color="#FF6464" size={18} className={styles['favorite-icon']} />
+            ) : (
+              <FaRegHeart
+                size={18}
+                color={favoriteHovered ? "#838383" : "#1E3C54"}
+                className={styles['favorite-icon']}
+              />
+            )}
           </button>
         </div>
       </div>
@@ -288,8 +406,8 @@ export default function TagLikeShareBtnIndex({ articleId }) {
                     copyActive
                       ? '/images/article/copy-active.svg'
                       : copyHovered
-                      ? '/images/article/copy-hover.svg'
-                      : '/images/article/copy-origin.svg'
+                        ? '/images/article/copy-hover.svg'
+                        : '/images/article/copy-origin.svg'
                   }
                   alt="複製"
                   style={{ height: '70%' }}

@@ -21,6 +21,22 @@
     display: none;
   }
 
+  .favorite-btn {
+    display: flex;
+    align-items: center;
+    // gap: 6px;
+    // border-radius: 5px;
+    // border: 1px solid var(--secondary-color-med);
+    background-color: var(--primary-color);
+    color: var(--secondary-color-med);
+    // padding: 8px 25px;
+    cursor: pointer;
+  }
+  
+  .favorite-icon {
+    color: var(--secondary-color-med);
+  }
+
 @media screen and (max-width: 390px){
     .y-tag-like-comment-share-fav-area{
       display: block !important;

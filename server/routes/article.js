@@ -602,4 +602,118 @@ router.delete('/:articleId/tags/:tagId', async (req, res) => {
   }
 });
 
+// 查詢文章收藏狀態
+router.get('/collection/:articleId', checkToken, async (req, res) => {
+  const { articleId } = req.params;
+  const userId = req.decoded.id;
+
+  if (!userId) {
+    return res.status(401).json({
+      status: 'error',
+      message: '請先登入'
+    });
+  }
+
+  try {
+    const [rows] = await pool.query(
+      'SELECT 1 FROM collection WHERE user_id = ? AND article_id = ?',
+      [userId, articleId]
+    );
+
+    return res.status(200).json({
+      status: 'success',
+      isFavorite: rows.length > 0
+    });
+  } catch (error) {
+    console.error('查詢收藏狀態錯誤:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: '查詢收藏狀態失敗'
+    });
+  }
+});
+
+// 新增文章收藏
+router.post('/collection', checkToken, async (req, res) => {
+  const { article_id } = req.body;
+  const userId = req.decoded.id;
+
+  if (!userId) {
+    return res.status(401).json({
+      status: 'error',
+      message: '請先登入'
+    });
+  }
+
+  if (!article_id) {
+    return res.status(400).json({
+      status: 'error',
+      message: '文章ID不能為空'
+    });
+  }
+
+  try {
+    // 先檢查是否已經收藏，避免重複收藏
+    const [existingRows] = await pool.query(
+      'SELECT 1 FROM collection WHERE user_id = ? AND article_id = ?',
+      [userId, article_id]
+    );
+
+    if (existingRows.length > 0) {
+      return res.status(400).json({
+        status: 'error',
+        message: '已經收藏過此文章'
+      });
+    }
+
+    // 新增收藏記錄
+    await pool.query(
+      'INSERT INTO collection (user_id, article_id, created_at) VALUES (?, ?, NOW())',
+      [userId, article_id]
+    );
+
+    return res.status(201).json({
+      status: 'success',
+      message: '成功加入收藏'
+    });
+  } catch (error) {
+    console.error('文章收藏錯誤:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: '文章收藏失敗'
+    });
+  }
+});
+
+// 刪除文章收藏
+router.delete('/collection/:articleId', checkToken, async (req, res) => {
+  const { articleId } = req.params;
+  const userId = req.decoded.id;
+
+  if (!userId) {
+    return res.status(401).json({
+      status: 'error',
+      message: '請先登入'
+    });
+  }
+
+  try {
+    await pool.query(
+      'DELETE FROM collection WHERE user_id = ? AND article_id = ?',
+      [userId, articleId]
+    );
+
+    return res.status(200).json({
+      status: 'success',
+      message: '成功取消收藏'
+    });
+  } catch (error) {
+    console.error('取消收藏錯誤:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: '取消收藏失敗'
+    });
+  }
+});
+
 export default router
