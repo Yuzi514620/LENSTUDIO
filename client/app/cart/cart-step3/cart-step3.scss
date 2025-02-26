@@ -1,7 +1,4 @@
-nav{
-  display: flex;
-  justify-content: flex-end;
-}
+
 
 .j-cartTitle{
   background-color: #003150;
@@ -35,24 +32,6 @@ nav{
   flex-direction: column;
 }
 
-.footer-block{
-  display: none;
-}
-
-.copyright {
-  background-color: #f6f6f6;
-  padding-right: 5%;
-  padding-left: 5%;
-}
-
-.copyright-text{
-  color: #000;
-}
-
-.copyright a,
-.copyright span {
-  color: #000
-}
 @media (max-width: 1200px){
   .j-shoppingCartBox {
     margin-top: 10%;

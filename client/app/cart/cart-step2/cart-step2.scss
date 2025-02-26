@@ -1,10 +1,4 @@
-nav{
-  display: flex;
-  justify-content: flex-end;
-}
-.nav-left{
- display: none;
-}
+
 .j-cartTitle{
   background-color: #003150;
   border-top-left-radius: 20px;
@@ -30,22 +24,6 @@ nav{
 
 .j-heightspace{
   padding: 3.0rem;
-}
-
-.footer-block{
-  display: none;
-}
-.copyright {
-  background-color: #f6f6f6;
-  padding-right: 5%;
-  padding-left: 5%;
-}
-.copyright-text{
-  color: #000;
-}
-.copyright a,
-.copyright span {
-  color: #000
 }
 
 @media(max-width:1400px){

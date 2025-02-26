@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react'
 import { Collapse } from 'react-bootstrap'
 
-export default function Footer() {
+export default function Footer({ isCartPage }) {
     const [aboutUsOpen, setAboutUsOpen] = useState(false)
     const [accountCenterOpen, setAccountCenterOpen] = useState(false)
     const [faqOpen, setFaqOpen] = useState(false)
   return (
     <>
+    {isCartPage ? '' :
       <footer>
         <div className="container">
           <div className="row footer-block">
@@ -147,12 +148,13 @@ export default function Footer() {
             </div>
           </div>
         </div>
-      </footer>
+      </footer>}
+     
       {/* copyright */}
-      <div className="copyright justify-content-between">
+      <div className={`copyright justify-content-between ${isCartPage ? 'copyrightColor' : ''}`}>
         <div className="row">
           {/* 左側連結 */}
-          <div className="col-lg-4 col-md-6 col-12 copyright-left d-flex justify-content-md-start justify-content-center">
+          <div className={`col-lg-4 col-md-6 col-12 copyright-left d-flex justify-content-md-start justify-content-center ${isCartPage ? 'aColor' : ''}`}>
             <a href="#">聯絡我們</a>
             <span>|</span>
             <a href="#">購物說明</a>
@@ -160,7 +162,7 @@ export default function Footer() {
             <a href="#">最新消息</a>
           </div>
           {/* 右側連結 */}
-          <div className="col-lg-8 col-md-6 col-12 copyright-right d-flex justify-content-md-end justify-content-center mt-md-0 mt-1 p-0">
+          <div className={`col-lg-8 col-md-6 col-12 copyright-right d-flex justify-content-md-end justify-content-center mt-md-0 mt-1 p-0 ${isCartPage ? 'aColor' : ''}`}>
             <div className="copyright-right-div">
               <div className="mobile-none">
                 <a href="#">網站使用條款</a>

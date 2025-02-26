@@ -34,6 +34,10 @@ export default function RootLayout({ children }) {
     [pathname]
   )
 
+  const isCartPage = useMemo(
+    () => pathname?.startsWith('/cart'),
+    [pathname]
+  )
   // top按鈕
   const [showButton, setShowButton] = useState(false)
 
@@ -80,13 +84,13 @@ export default function RootLayout({ children }) {
             style={{ marginTop: '80px' }}
           />
           {!isTeacherPage && (
-            <Header searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
+            <Header searchOpen={searchOpen} setSearchOpen={setSearchOpen} isCartPage={isCartPage}/>
           )}
           <AppProvider>
             {' '}
             <main className="root-content">{children}</main>
           </AppProvider>
-          {isTeacherPage ? <TeacherFooter /> : <Footer />}
+          {isTeacherPage ? <TeacherFooter /> : <Footer isCartPage={isCartPage}/>}
         </div>
 
         {/* top按鈕 */}

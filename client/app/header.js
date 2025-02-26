@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import React, { useRef, useEffect, useState } from 'react'
 import { usePathname } from "next/navigation";
 
-export default function Header({ searchOpen, setSearchOpen }) {
+export default function Header({ searchOpen, setSearchOpen, isCartPage }) {
   const router = useRouter()
   const searchRef = useRef(null)
   const inputRef = useRef(null)
@@ -86,8 +86,11 @@ export default function Header({ searchOpen, setSearchOpen }) {
         <div className="menu-icon">
           <img src="/images/icon/menu.svg" alt="menu" />
         </div>
-        <nav>
-          <ul className="nav-left">
+        <nav className={`${isCartPage ? 'd-flex justify-content-end' : ''}`}>
+            {isCartPage ? (
+           ''
+          ) : (
+            <ul className="nav-left">
             <li>
               <Link href="/">首頁</Link>
             </li>
@@ -214,6 +217,8 @@ export default function Header({ searchOpen, setSearchOpen }) {
               <a href="#">聯絡我們</a>
             </li>
           </ul>
+          )}
+          
           <ul className="nav-right">
             <li>
               <a
