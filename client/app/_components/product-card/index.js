@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
@@ -9,25 +7,48 @@ import { Pagination } from 'swiper/modules'
 import styles from './ProductCard.module.scss'
 
 export default function ProductCardIndex() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([])
+  const productRefs = useRef([]) // 用來儲存所有 productCard 的 ref
 
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch('http://localhost:8000/api/product');
-        if (!res.ok) throw new Error("API 請求失敗");
+        const res = await fetch('http://localhost:8000/api/product')
+        if (!res.ok) throw new Error("API 請求失敗")
 
-        const data = await res.json();
+        const data = await res.json()
         const sortedProducts = data
           .filter(product => product.category_id === 1 && ![18, 15, 16].includes(product.id))
-          .sort((a, b) => b.price - a.price);
-        setProducts(sortedProducts.slice(0, 7));
+          .sort((a, b) => b.price - a.price)
+        setProducts(sortedProducts.slice(0, 7))
       } catch (error) {
-        console.error("獲取商品失敗:", error);
+        console.error("獲取商品失敗:", error)
       }
     }
-    fetchProducts();
-  }, []);
+    fetchProducts()
+  }, [])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.fadeInUp);
+          } else {
+            entry.target.classList.remove(styles.fadeInUp); // ✅ 滑出畫面後移除動畫，確保可以重複觸發
+          }
+        });
+      },
+      { threshold: 0.3 } // ✅ 30% 出現在視野內就觸發
+    );
+  
+    productRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+  
+    return () => observer.disconnect();
+  }, [products]);
+  
 
   return (
     <div className={`${styles.productArea} text-white py-5`}>
@@ -37,20 +58,23 @@ export default function ProductCardIndex() {
         {/* Swiper 輪播區塊 */}
         <Swiper
           modules={[Pagination]}
-          spaceBetween={20} // 卡片間距
-          slidesPerView={1} // 每次顯示 1 張（手機）
+          spaceBetween={20}
+          slidesPerView={1}
           breakpoints={{
-            768: { slidesPerView: 2 }, // 平板顯示 2 張
-            1024: { slidesPerView: 3 }, // 桌面顯示 3 張
-            1280: { slidesPerView: 4 } // 超大螢幕顯示 4 張
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 }
           }}
-          pagination={{ clickable: true }} // 啟用點點分頁
+          pagination={{ clickable: true }}
           className={styles.mySwiper}
         >
           {products.length > 0 ? (
-            products.map((product) => (
+            products.map((product, index) => (
               <SwiperSlide key={product.id}>
-                <div className={`card ${styles.productCard}`}>
+                <div
+                  ref={(el) => (productRefs.current[index] = el)} // ✅ 設定 ref
+                  className={`card ${styles.productCard}`} // ✅ 預設沒有動畫，滑入時才加
+                >
                   <div className="card-body">
                     <div className={`bg-white mb-3 ${styles.cardArea}`}>
                       <div className={`d-flex justify-content-between align-items-center mb-2 px-2 py-2 ${styles.cardImgArea}`}>

@@ -1,22 +1,31 @@
-"use client";
-
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect, useRef } from "react";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import styles from "./product-pagination.module.scss";
 
 export default function Pagination({ totalProducts, currentPage, setCurrentPage }) {
   const itemsPerPage = 12;
   const totalPages = Math.ceil(totalProducts / itemsPerPage);
+  const firstPageRef = useRef(null);
+
+  useEffect(() => {
+    if (currentPage === 1 && firstPageRef.current) {
+      firstPageRef.current.focus({ preventScroll: true });
+    }
+  }, [currentPage]);
+  
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      setTimeout(() => {
+        document.getElementById(`page-${page}`)?.focus();
+      }, 10);
     }
   };
 
   const generatePageNumbers = () => {
     const pages = [];
-    const maxPageButtons = window.innerWidth <= 391 ? 3 : 5; //手機板顯示較少頁碼
+    const maxPageButtons = window.innerWidth <= 391 ? 3 : 5;
 
     if (totalPages <= maxPageButtons) {
       for (let i = 1; i <= totalPages; i++) {
@@ -57,7 +66,7 @@ export default function Pagination({ totalProducts, currentPage, setCurrentPage 
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            «
+            <FaAngleLeft size={15} />
           </button>
         </li>
 
@@ -68,6 +77,8 @@ export default function Pagination({ totalProducts, currentPage, setCurrentPage 
               <span className={`page-link ${styles["page-link"]}`}>...</span>
             ) : (
               <button
+                ref={page === 1 ? firstPageRef : null}
+                id={`page-${page}`}
                 className={`page-link ${styles["page-link"]}`}
                 onClick={() => handlePageChange(page)}
               >
@@ -84,7 +95,7 @@ export default function Pagination({ totalProducts, currentPage, setCurrentPage 
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
           >
-            »
+            <FaAngleRight size={15} />
           </button>
         </li>
 

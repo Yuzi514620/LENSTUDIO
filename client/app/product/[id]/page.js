@@ -6,7 +6,6 @@ import ProductInfo from "./_components/product-info";
 import ProductSpecs from "./_components/product-specs";
 import RelatedProducts from "./_components/related-products";
 import BreadcrumbIndex from "./_components/breadcrumb";
-import "../css/product-list.css";
 
 export default function ProductDetailPage() {
   const params = useParams();

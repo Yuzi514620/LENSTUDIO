@@ -1,8 +1,26 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./product-specs.module.scss";
 
 export default function ProductSpecs({ introduce, specs = [] }) {
+  const descriptionRef = useRef(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("fadeIn");
+          } else {
+            entry.target.classList.remove("fadeIn"); // ✅ 滑出視野後重置動畫
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (descriptionRef.current) observer.observe(descriptionRef.current);
+    return () => observer.disconnect();
+  }, []);
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min")
       .then(() => {

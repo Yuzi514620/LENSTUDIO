@@ -3,6 +3,31 @@
   margin-top: 10px !important;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 預設 opacity: 0，只有進入畫面時才顯示 */
+.card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+}
+
+/* 進入視野時觸發動畫 */
+.fadeInUp {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+
 .cardTitle {
   font-size: 1.3rem;
   color: #23425a;
@@ -10,7 +35,7 @@
 }
 
 .cardText {
-  color: #d0b088;
+  color: #e58e41;
 }
 
 // 主要容器
@@ -72,7 +97,7 @@
   }
 
   .cardText {
-    color: #d0b088;
+    color: #e58e41;
     font-size: 0.8rem;
 
   }

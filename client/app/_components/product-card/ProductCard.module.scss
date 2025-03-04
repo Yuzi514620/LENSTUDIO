@@ -1,3 +1,19 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* 滑入時才加上動畫 */
+.fadeInUp {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
 .productPrice {
   color: black;
   font-weight: bold;
@@ -23,7 +39,9 @@
   border: none;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
 .productCard:hover {

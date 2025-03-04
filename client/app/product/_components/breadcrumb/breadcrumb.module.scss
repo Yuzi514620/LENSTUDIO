@@ -11,7 +11,7 @@
   color: #8f8f8f;
 }
 
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumbItem + .breadcrumbItem::before {
   content: '>';
   color: #8f8f8f;
   margin-right: 5px;

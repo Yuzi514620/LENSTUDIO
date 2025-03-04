@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import CompareButton from "../product-button";
 import CartButton from "../cart-button";
@@ -7,9 +7,36 @@ import styles from "./product-card.module.scss";
 
 export default function ProductCard({ product }) {
   const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef(null); // 👈 取得每張卡片的 DOM 元素
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.fadeInUp); // ✅ 進入畫面時觸發動畫
+          } else {
+            entry.target.classList.remove(styles.fadeInUp); // ✅ 滑出畫面時移除動畫，讓它可以重新播放
+          }
+        });
+      },
+      { threshold: 0.3 } // ✅ 當 30% 出現在視野內就觸發
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div
+      ref={cardRef} // 👈 設定 ref
       className={`col-6 col-sm-6 col-md-4 col-lg-3 mb-4 ${styles.card}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

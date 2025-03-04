@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import { MdError } from "react-icons/md";
 import styles from "./favorite-button.module.scss";
 
 export default function FavoriteButton({ productId }) {
@@ -25,21 +27,13 @@ export default function FavoriteButton({ productId }) {
 
   const toggleFavorite = async () => {
     if (!token) {
-      Swal.fire({
-        icon: "warning",
-        title: "請先登入",
-        text: "您需要登入後才能收藏商品",
-        confirmButtonText: "前往登入",
-        showCancelButton: true,
-        cancelButtonText: "取消",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "/login";
-        }
-      });
-      return;
+      toast.success('請先登入才能加入收藏！', {
+        position: 'top-right',
+        autoClose: 2000,
+        icon: <MdError size={30} />, // ✅ 改成購物車 icon
+      })
+      return
     }
-
     try {
       const method = isFavorite ? "DELETE" : "POST";
       const res = await fetch("http://localhost:8000/api/product/collection", {

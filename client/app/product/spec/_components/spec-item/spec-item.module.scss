@@ -1,6 +1,7 @@
 .compareTitle {
   text-align: center;
   font-weight: bold;
+  margin-left: 130px;
 }
 .productSelect {
   width: 150px;
@@ -22,6 +23,8 @@
 
 .price {
   padding-top: 10px;
+  color: #e58e41 !important;
+  font-weight: bold;
 }
 
 .productContainer {
@@ -127,6 +130,7 @@
     text-align: center;
     font-size: 1.2rem;
     margin-top: 70px;
+  margin-left: 10px;
   }
 
   .productSelect {

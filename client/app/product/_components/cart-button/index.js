@@ -1,6 +1,9 @@
 'use client'
 import Swal from 'sweetalert2'
 import styles from './cart-button.module.scss'
+import { toast } from "react-toastify";
+import { MdError } from "react-icons/md";
+
 
 export default function CartButton({ product }) {
   const addToCart = () => {
@@ -9,21 +12,14 @@ export default function CartButton({ product }) {
         ? localStorage.getItem('loginWithToken')
         : null
 
-    if (!token) {
-      Swal.fire({
-        icon: 'warning',
-        title: '請先登入',
-        text: '您需要登入後才能加入購物車',
-        confirmButtonText: '前往登入',
-        showCancelButton: true,
-        cancelButtonText: '取消',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = '/login'
+        if (!token) {
+          toast.success("請先登入才能加入購物車！", {
+            position: "top-right",
+            autoClose: 2000,
+            icon: <MdError size={30} />, // ✅ 改成購物車 icon
+          });          
+          return;
         }
-      })
-      return
-    }
 
     const cart = JSON.parse(localStorage.getItem('cart')) || []
     const existingProduct = cart.find((item) => item.id === product.id)
@@ -46,7 +42,7 @@ export default function CartButton({ product }) {
       position: 'top-end',
       customClass: {
         popup: styles.swalPopupAdjust
-      }
+      },
     });
 
   }
