@@ -5,7 +5,7 @@ import authenticate from '../middlewares.js'
 const router = express.Router()
 
 router.get("/collection", authenticate, async (req, res) => {
-  console.log("✅ 收到 /api/courses/collection 請求"); 
+  console.log("✅ 收到 /api/courses/collection 請求");
   try {
     if (!req.userId) {
       return res.status(401).json({ message: "未授權，請先登入" });

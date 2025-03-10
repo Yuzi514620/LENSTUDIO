@@ -12,6 +12,7 @@ import {
 import TeacherCoursesList from '../teacher-courses-list/page'
 import Link from "next/link";
 
+
 export default function TeacherInfo({ teacherId }) {
   const [teacher, setTeacher] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -63,7 +64,7 @@ export default function TeacherInfo({ teacherId }) {
   }, [isModalOpen]);
 
   console.log("📌 TeacherInfo 接收到的 teacherId:", teacherId);
-  if (loading) return <p>載入中...</p>;
+  if (loading) return <p></p>;
   if (!teacher) return <p>無法找到講師資料</p>;
 
   return (

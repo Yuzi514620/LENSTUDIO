@@ -70,7 +70,7 @@ export default function CoursesPage() {
         <CoursesFilter courses={filteredCourses} setFilteredCourses={setFilteredCourses} />
       </div>
 
-      {loading && <p>載入中...</p>}
+      {loading && <></>}
       {error && <p className="text-danger">{error}</p>}
       {!loading && !error && <PopularTeacher courses={filteredCourses} />}
     </>

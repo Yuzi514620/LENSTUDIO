@@ -48,53 +48,78 @@ router.get('/me', async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
-    
-
     if (!decoded) {
       console.log('❌ Token 解析失敗')
       return res.status(403).json({ error: '權限不足' })
     }
 
-    // ✅ 查詢 `teachers` 表，取得完整講師資料
+    console.log(`📌 正在查詢 user_id = ${decoded.id} 的使用者資料`)
+
+    // **先查詢 `users` 表，取得 level**
+    const userSql = `SELECT id, name, mail, level FROM users WHERE id = ? LIMIT 1`
+    const [userRows] = await pool.query(userSql, [decoded.id])
+
+    if (userRows.length === 0) {
+      console.log(`❌ 找不到 user_id = ${decoded.id} 的使用者`)
+      return res.status(404).json({ error: '找不到使用者' })
+    }
+
+    const user = userRows[0]
+
+    // **如果是管理員，直接回傳，不查詢 teachers 表**
+    if (user.level === 88) {
+      console.log("🔹 管理員登入，不查詢 teachers 表")
+      return res.json({
+        id: user.id,
+        name: user.name,
+        email: user.mail,
+        level: user.level,  // ✅ 讓前端可以判斷身份
+        teacher_id: null,
+        bio: null,
+        website: null,
+        facebook: null,
+        instagram: null,
+        youtube: null,
+        image: '/images/teachers/default-avatar.jpg', // 預設圖像
+      })
+    }
+
+    // **如果是老師，繼續查詢 `teachers` 表**
     console.log(`📌 正在查詢 user_id = ${decoded.id} 的講師資料`)
-    const sql = `
-      SELECT t.id AS teacher_id, t.name, t.email, t.bio, t.website, 
-             t.facebook, t.instagram, t.youtube, t.image
-      FROM teachers t
-      WHERE t.user_id = ?
-      LIMIT 1
+    const teacherSql = `
+      SELECT id AS teacher_id, bio, website, facebook, instagram, youtube, image 
+      FROM teachers WHERE user_id = ? LIMIT 1
     `
-    const [rows] = await pool.query(sql, [decoded.id])
+    const [teacherRows] = await pool.query(teacherSql, [decoded.id])
 
-
-    // 🔴 **如果找不到講師資料**
-    if (rows.length === 0) {
-      console.log(`❌ 找不到 user_id = ${decoded.id} 的講師資料`)
+    if (teacherRows.length === 0) {
+      console.log(`❌ user_id = ${decoded.id} 沒有對應的老師資料`)
       return res.status(404).json({ error: '找不到講師資料' })
     }
 
-    // ✅ 取得講師資料
-    const teacher = rows[0]
+    const teacher = teacherRows[0]
 
-
-    // 🔹 回傳完整的講師資訊給前端
+    // ✅ 回傳老師完整資訊
     res.json({
-      id: decoded.id, // 用戶 ID
-      name: teacher.name,
-      email: teacher.email,
+      id: user.id, 
+      name: user.name, 
+      email: user.mail, 
+      level: user.level, // ✅ 讓前端可以判斷身份
+      teacher_id: teacher.teacher_id,
       bio: teacher.bio,
       website: teacher.website,
       facebook: teacher.facebook,
       instagram: teacher.instagram,
       youtube: teacher.youtube,
-      image: teacher.image || '/images/teachers/default-avatar.jpg', // 預設大頭貼
-      teacher_id: teacher.teacher_id, // 講師 ID
+      image: teacher.image || '/images/teachers/default-avatar.jpg',
     })
+
   } catch (error) {
     console.error('❌ 獲取講師資訊失敗:', error)
-    res.json({ error: '無法獲取講師資訊' })
+    res.status(500).json({ error: '無法獲取講師資訊' })
   }
 })
+
 
 // 編輯老師資料
 router.put('/me', authenticate, async (req, res) => {
@@ -146,6 +171,60 @@ router.put('/me', authenticate, async (req, res) => {
     connection.release() // 釋放連線
   }
 })
+
+router.get('/admin/courses', async (req, res) => {
+  try {
+    console.log("✅ 收到 /api/teachers/admin/courses API 請求");
+
+    if (!req.headers.authorization) {
+      return res.status(401).json({ error: "未提供驗證 token" });
+    }
+
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    // **查詢 `users.level`，確認是否為管理員**
+    const sqlUser = `SELECT level FROM users WHERE id = ?`;
+    const [userRows] = await pool.query(sqlUser, [decoded.id]);
+
+    if (userRows.length === 0) {
+      return res.status(404).json({ error: "找不到使用者" });
+    }
+
+    if (userRows[0].level !== 88) {
+      return res.status(403).json({ error: "權限不足，僅限管理員存取" });
+    }
+
+    console.log(`✅ 取得管理員等級: ${userRows[0].level}`);
+
+    // **查詢所有課程**
+    let query = `
+      SELECT 
+        c.*,  
+        t.name AS teacher_name, 
+        t.image AS teacher_image,
+        IFNULL(AVG(cm.rating), 0) AS rating,
+        COUNT(cm.id) AS review_count
+      FROM courses c
+      LEFT JOIN teachers t ON c.teacher_id = t.id
+      LEFT JOIN comments cm ON c.id = cm.course_id
+      GROUP BY c.id, t.id
+    `;
+
+    const [courses] = await pool.query(query);
+
+    if (!Array.isArray(courses)) {
+      return res.status(500).json({ error: "資料庫錯誤，無法取得課程" });
+    }
+
+    res.json(courses); // 🔹 **直接回傳陣列，與老師的 API 格式統一**
+  } catch (error) {
+    console.error("❌ 取得管理員課程失敗:", error);
+    res.status(500).json({ error: "無法取得管理員課程" });
+  }
+});
+
+
 
 
 // ✅ 獲取特定講師的資訊 + 該老師的所有課程(包含評分)

@@ -1,0 +1,173 @@
+/* 整體樣式 */
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+.supportTitle {
+margin: 2rem 0;
+  font-size: 1.5rem;
+  color: var(--primary-color-med);
+}
+
+/* 左側：聊天室列表 */
+.chatList {
+  border-right: 2px solid #ddd;
+  height: 80vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.chatItem {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.chatItem:hover,
+.chatItem.active {
+  background: #f0f0f0;
+}
+
+/* 右側：聊天視窗 */
+.chatWindow {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  padding: 20px;
+}
+
+.chatHeader {
+  padding: 15px;
+  text-align: center;
+  background-color: var(--white);
+  border-radius: 1rem 1rem 0 0;
+}
+
+/* 訊息內容 */
+.chatBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+}
+
+.messageWrapper {
+  display: flex;
+  align-items: flex-end;
+  max-width: 75%;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin: 0 8px;
+  object-fit: cover;
+}
+
+.messageBox {
+  padding: 10px 15px;
+  border-radius: 16px;
+  word-break: break-word;
+  max-width: 100%;
+  min-width: 50px;
+}
+
+/* 訊息泡泡 */
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 60%; /* 讓訊息框不會過寬 */
+  padding: 10px 15px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  word-break: break-word;
+  position: relative;
+  min-width: 50px;
+}
+
+/* 老師 / 使用者的訊息 */
+.teacher {
+  background-color: #DCF8C6;
+  align-self: flex-end;
+  text-align: left;
+}
+
+/* 管理員的訊息 */
+.admin {
+  background-color: #EAEAEA;
+  align-self: flex-start;
+  text-align: left;
+}
+
+/* 訊息輸入框 */
+.chatFooter {
+  display: flex;
+  padding: 10px;
+  background: #f8f9fa;
+  border-top: 2px solid #ddd;
+}
+
+.inputField {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.sendButton {
+  margin-left: 10px;
+  padding: 10px 15px;
+  background: var(--primary-color-med);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.sendButton:hover {
+  background: var(--primary-color);
+}
+
+.sender-name {
+  font-weight: bold;
+  margin-bottom: 3px;
+  color: #333;
+}
+
+/* 送出的訊息樣式 */
+.sent .messageBox {
+  background-color: #007AFF;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+/* 接收的訊息樣式 */
+.received .messageBox {
+  background-color: #E5E5EA;
+  color: black;
+  border-bottom-left-radius: 4px;
+}
+
+/* 時間戳記 */
+.timestamp {
+  font-size: 12px;
+  color: #777;
+  margin-left: 8px;
+  align-self: flex-end;
+}
+
+.sent {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+/* 接收的訊息（靠左） */
+.received {
+  align-self: flex-start;
+  flex-direction: row;
+}

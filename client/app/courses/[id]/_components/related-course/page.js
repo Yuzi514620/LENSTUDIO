@@ -39,7 +39,7 @@ export default function RelatedCourses({ course }) {
     fetchRelatedCourses()
   }, [course.category, course.id]) 
 
-  if (loading) return <p>載入中...</p>
+  if (loading) return <p></p>
   if (relatedCourses.length === 0) return <p>沒有找到相關課程</p>
 
   return (

@@ -230,7 +230,7 @@ export default function CourseEdit() {
   
   
 
-  if (loading) return <p>載入中...</p>
+  if (loading) return <p></p>
   if (error) return <p className="text-danger">{error}</p>
 
   return (

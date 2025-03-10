@@ -15,6 +15,7 @@ import AppProvider from '@/hooks/app-provider'
 import { CompareProvider } from '@/app/product/_context/CompareContext'
 import { IoIosArrowUp } from 'react-icons/io'
 import dynamic from "next/dynamic";
+import ScrollTopButton from "@/app/_components/top-btn/page.js"
 
 const notoSansTC = Noto_Sans_TC({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -127,11 +128,7 @@ export default function RootLayout({ children }) {
         </div>
 
         {/* top按鈕 */}
-        {showButton && (
-          <button onClick={scrollToTop} className="scroll-top-btn hvr-icon-bob">
-            <IoIosArrowUp size={25} className="hvr-icon" />
-          </button>
-        )}
+        <ScrollTopButton />
       </body>
     </html>
   )

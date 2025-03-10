@@ -9,88 +9,134 @@ import Pagination from '../courses/_components/pagination/page'
 import Link from 'next/link'
 
 export default function CourseManagement() {
-  const [user, setUser] = useState(null)
-  const [courses, setCourses] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
+  const [user, setUser] = useState(null);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const router = useRouter()
+  const router = useRouter();
+  const coursesPerPage = 5;
 
-  const coursesPerPage = 5
-
-  // **權限驗證：檢查是否為老師**
+  // **先獲取使用者資訊**
   useEffect(() => {
-    const fetchCoursesAndUser = async () => {
+    const fetchUser = async () => {
       try {
-        const token = localStorage.getItem('loginWithToken')
+        const token = localStorage.getItem('loginWithToken');
         if (!token) {
-          console.log('沒有 Token，跳轉登入頁面')
-          router.push('/login')
-          return
+          console.log('⛔️ 沒有 Token，跳轉登入頁面');
+          router.push('/login');
+          return;
         }
 
-        console.log('正在發送請求到 /api/teachers/me/courses...')
-        const res = await fetch('http://localhost:8000/api/teachers/me/courses', {
-          headers: { Authorization: `Bearer ${token}` }, 
-        })
+        console.log('📡 正在發送請求取得使用者資訊...');
+        const userRes = await fetch('http://localhost:8000/api/teachers/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-        if (!res.ok) throw new Error(`API 錯誤: ${res.status}`) 
+        if (!userRes.ok) throw new Error(`API 錯誤: ${userRes.status}`);
 
-        const data = await res.json()
-        console.log('✅ 取得課程與使用者資訊:', data)
+        const userData = await userRes.json();
+        console.log('✅ 取得使用者資訊:', userData);
 
-        if (!data.length || data[0]?.level === undefined) { 
-          console.error('❌ API 回傳錯誤，沒有 level 值', data)
-          router.push('/dashboard') // 避免進入錯誤頁面
-          return
+        if (!userData.level) {
+          console.error('❌ API 回傳錯誤，沒有 level 值');
+          router.push('/dashboard');
+          return;
         }
+
+        // **儲存 `userRole` 到 localStorage**
+        const userRole = userData.level === 1 ? "teacher" : userData.level === 88 ? "admin" : "unknown";
+        localStorage.setItem("userRole", userRole);
+        console.log("📌 `userRole` 已存入 localStorage:", userRole);
 
         setUser({
-          name: data[0].teacher_name,
-          level: data[0].level,
-          email: data[0].mail,
-        })
+          name: userData.teacher_name || "未命名",
+          level: userData.level,
+          email: userData.mail,
+        });
 
-        setCourses(data) // 設定課程資料
-
-        if (data[0].level !== 1) {
-          console.warn('⚠️ 只有老師能進入此頁面，跳轉到 /dashboard')
-          router.push('/dashboard')
-        }
       } catch (error) {
-        console.error('❌ 獲取使用者與課程失敗:', error)
-        router.push('/login')
-      } finally {
-        setLoading(false)
+        console.error('❌ 獲取使用者資訊失敗:', error);
+        router.push('/login');
       }
-    }
+    };
 
-    fetchCoursesAndUser()
-  }, [])
+    fetchUser();
+  }, []);
+
+  // **獲取課程資訊**
+  useEffect(() => {
+    if (!user) return;
+  
+    const fetchCourses = async () => {
+      try {
+        const token = localStorage.getItem("loginWithToken");
+        let coursesUrl = "";
+    
+        if (user.level === 1) {
+          coursesUrl = "http://localhost:8000/api/teachers/me/courses";
+        } else if (user.level === 88) {
+          console.log("🔹 管理員登入");
+          coursesUrl = "http://localhost:8000/api/teachers/admin/courses";
+        } else {
+          console.warn("⚠️ 無權限訪問，跳轉到 /dashboard");
+          router.push("/dashboard");
+          return;
+        }
+    
+        console.log("📡 正在發送請求到:", coursesUrl);
+        const coursesRes = await fetch(coursesUrl, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+    
+        if (!coursesRes.ok) throw new Error(`API 錯誤: ${coursesRes.status}`);
+    
+        const coursesData = await coursesRes.json();
+        console.log("✅ 取得課程資料:", coursesData);
+    
+        // **這裡確保 coursesData 是陣列**
+        if (!Array.isArray(coursesData)) {
+          throw new Error("課程資料格式錯誤，應為陣列");
+        }
+    
+        setCourses(coursesData);
+      } catch (error) {
+        console.error("❌ 獲取課程失敗:", error);
+        setCourses([]); // 🚀 **確保 `setCourses()` 至少設置為空陣列**
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    
+  
+    fetchCourses();
+  }, [user]);
+  
 
   useEffect(() => {
-    console.log('📌 目前的 courses:', courses)
+    console.log('📌 目前的 courses:', courses);
     if (courses.length > 0) {
-      setCurrentPage(1)
+      setCurrentPage(1);
     }
-  }, [courses])
+  }, [courses]);
 
   // **搜尋 & 分頁**
   const filteredCourses = courses.filter(
     (course) =>
       course.title.includes(searchTerm) || course.category.includes(searchTerm)
-  )
+  );
 
-  const totalPages = filteredCourses.length > 0 ? Math.ceil(filteredCourses.length / coursesPerPage) : 1
-  const indexOfLastCourse = currentPage * coursesPerPage
-  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage
-  const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse)
+  const totalPages = filteredCourses.length > 0 ? Math.ceil(filteredCourses.length / coursesPerPage) : 1;
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
 
-  console.log('📌 當前顯示的課程列表:', currentCourses)
-  console.log('📌 當前頁碼:', currentPage, ' / 總頁數:', totalPages)
+  // console.log('📌 當前顯示的課程列表:', currentCourses);
+  // console.log('📌 當前頁碼:', currentPage, ' / 總頁數:', totalPages);
 
-  if (loading) return <p>載入中...</p>
+  if (loading) return <p>載入中...</p>;
 
   return (
     <>
@@ -152,11 +198,11 @@ export default function CourseManagement() {
             </thead>
             <tbody>
               {currentCourses.map((course) => {
-                console.log(`📌 顯示課程:`, course)
+                {/* console.log(`📌 顯示課程:`, course) */}
                 const safeImage = course.image_url
                   ? course.image_url
                   : `/uploads/course-cover/${course.image_url}` ||
-                    '/images/course-cover/default-course.jpg'
+                  '/images/course-cover/default-course.jpg'
                 return (
                   <tr key={course.id}>
                     <td className={styles['course-img']} data-label="課程圖片">
@@ -194,14 +240,13 @@ export default function CourseManagement() {
                       ).toLocaleString()}
                     </td> */}
                     <td data-label="學生人數">{course.student_count.toLocaleString()}</td>
-                    <td  data-label="發布狀態">
+                    <td data-label="發布狀態">
                       <div className={styles['state-circle']}>
                         <div
-                          className={` ${
-                            course.status === 'published'
-                              ? styles['published']
-                              : styles['draft']
-                          }`}
+                          className={` ${course.status === 'published'
+                            ? styles['published']
+                            : styles['draft']
+                            }`}
                         ></div>
                         {course.status === 'published' ? '上架中' : '未上架'}
                       </div>

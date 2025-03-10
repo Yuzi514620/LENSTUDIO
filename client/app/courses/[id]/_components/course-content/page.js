@@ -10,7 +10,7 @@ export default function CourseContent({ content }) {
     setIsExpanded(!isExpanded);
   };
 
-  if (!content) return <p>載入中...</p>;
+  if (!content) return <p></p>;
 
   return (
     <div className={styles['course-detail-container']}>

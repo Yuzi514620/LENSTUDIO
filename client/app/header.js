@@ -88,10 +88,10 @@ export default function Header({ searchOpen, setSearchOpen, isCartPage }) {
         </div>
         <nav className={`d-flex justify-content-end`}>
           <ul className="nav-left">
-          <li className={pathname === "/" ? "nav-active" : ""}>
+            <li className={pathname === "/" ? "nav-active" : ""}>
               <Link href="/">首頁</Link>
             </li>
-            <li className={pathname === "/product" ? "nav-active" : ""}>
+            <li className={pathname.startsWith("/product") ? "nav-active" : ""}>
               <Link href="/product">產品系列</Link>
               <div className="hover-gap" />
               {/* 透明的緩衝區域 */}
@@ -201,13 +201,13 @@ export default function Header({ searchOpen, setSearchOpen, isCartPage }) {
                 <div className="separator" />
               </ul>
             </li>
-            <li className={pathname === "/rental" ? "nav-active" : ""}>
+            <li className={pathname.startsWith("/rental") ? "nav-active" : ""}>
               <Link href="/rental">租借服務</Link>
             </li>
-            <li className={pathname === "/courses" ? "nav-active" : ""}>
+            <li className={pathname.startsWith("/courses") ? "nav-active" : ""}>
               <Link href="/courses">影像學院</Link>
             </li>
-            <li className={pathname === "/article" ? "nav-active" : ""}>
+            <li className={pathname.startsWith("/article") ? "nav-active" : ""}>
               <Link href="/article">影像誌</Link>
             </li>
             <li>

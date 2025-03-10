@@ -119,9 +119,10 @@ export default function TeacherSidebar() {
 
               <li
                 className={
-                  pathname === '/teacher' ||
-                  (pathname.startsWith('/teacher/course') &&
-                    pathname !== '/teacher/course/course-add')
+                  (pathname === '/teacher' ||
+                    (pathname.startsWith('/teacher/course') &&
+                      pathname !== '/teacher/course/course-add' &&
+                      pathname !== '/teacher/course/support')) 
                     ? styles.active
                     : ''
                 }
@@ -141,10 +142,12 @@ export default function TeacherSidebar() {
                 </Link>
               </li>
 
-              <li>
-                <a href="#">
+              <li className={
+                pathname === '/teacher/course/support' ? styles.active : ''
+              }>
+                <Link href="/teacher/course/support">
                   <FaQuestionCircle /> 客服中心
-                </a>
+                </Link>
               </li>
             </ul>
 

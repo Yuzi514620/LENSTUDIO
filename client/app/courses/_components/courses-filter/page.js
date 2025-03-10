@@ -131,7 +131,7 @@ export default function CoursesFilter({ courses, setFilteredCourses }) {
       </div>
 
       {courses.length === 0 ? (
-        <p>課程載入中...</p>
+        <p></p>
       ) : (
         <CourseList courses={filtered} />
       )}

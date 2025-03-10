@@ -1,0 +1,32 @@
+.top-btn {
+    width: 55px;               
+    height: 55px;              
+    border-radius: 50%;        
+    background-color: var(--warning-color); 
+    color: white;             
+    border: none;            
+    position: fixed;          
+    bottom: 15px;            
+    right: 30px;             
+    z-index: 1000;          
+    display: flex;            
+    align-items: center;       
+    justify-content: center;  
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    cursor: pointer;      
+  
+    &:hover {
+      background-color: var(--warning-color-dark); 
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); 
+      transform: scale(1.05);    
+    }
+  
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; 
+  }
+  
+  body.swal2-shown {
+    padding: 0 !important;
+  }
+  body.swal2-shown {
+    overflow: visible !important; 
+  }

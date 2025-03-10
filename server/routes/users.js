@@ -576,7 +576,6 @@ router.get("/users/me", checkToken, async (req, res) => {
 
 
 
-
 router.post("/status", checkToken, (req, res) => {
   const { decoded } = req;
   const token = jwt.sign(

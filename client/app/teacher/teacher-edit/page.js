@@ -124,7 +124,7 @@ export default function TeacherEdit() {
     }
   }
 
-  if (loading) return <p>載入中...</p>
+  if (loading) return <p></p>
   if (error) return <p className="text-danger">{error}</p>
 
   const handleUploadClick = () => {
