@@ -125,3 +125,24 @@
   height: 10px;
   border-radius: 5px;
 }
+
+// 快速留言
+.k-quick-reply-container {
+  display: flex;
+}
+.k-quick-reply-btn {
+  padding: 5px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  border: none;
+  background-color: transparent;
+  line-height: 1;
+  cursor: pointer;
+  &:hover,
+  &:active,
+  &:active:focus,
+  &:active:hover,
+  &:disabled {
+    opacity: 0.8;
+  }
+}

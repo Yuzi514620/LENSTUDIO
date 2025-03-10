@@ -15,7 +15,6 @@ export default function RentReviews({ reviews = [] }) {
 
 
   const handleReview = async (review) => {
-
     const today = new Date();
     const endDate = new Date(review.end_date);
     const commentDate = review.comment_at ? new Date(review.comment_at) : null;
@@ -30,6 +29,10 @@ export default function RentReviews({ reviews = [] }) {
     // 按鈕顯示邏輯
     const showConfirmButton = canLeaveComment; // 超過 30 天未留言，不顯示「儲存」
     const showDenyButton = review.comment !== null && canLeaveComment; // 超過 30 天已留言，不顯示「刪除」
+
+    // 快速留言
+    const showQuickReplyButtons = review.comment === null && canLeaveComment; // ✅ 只有當 `comment === null` 才會顯示
+
 
     // 控制 textarea 是否可輸入
     const isDisabled = !canLeaveComment ? 'disabled style="caret-color: transparent;"' : '';
@@ -57,7 +60,17 @@ export default function RentReviews({ reviews = [] }) {
             ~
             <span>${new Date(review.end_date).toISOString().split('T')[0]}</span>
           </div>
-          <label class="my-2 d-block k-swal-label">評論內容</label>
+          <div class="d-flex">
+            <label class="my-2 me-2 d-block k-swal-label">評論內容</label>
+            ${showQuickReplyButtons ? `
+              <div class="k-quick-reply-container">
+                <button class="k-quick-reply-btn" onclick="document.getElementById('comment').value='輕鬆租，輕鬆還，超讚！👍'">👍</button>
+                <button class="k-quick-reply-btn" onclick="document.getElementById('comment').value='出貨快，設備佳，五星好評～⭐'">⭐</button>
+                <button class="k-quick-reply-btn" onclick="document.getElementById('comment').value='線上租借超快、超方便！推推❤️'">❤️</button>
+              </div>
+            ` : ''}
+          </div>
+  
           <textarea id="comment" class="form-control" rows="3" ${isDisabled}>${review.comment || ''}</textarea>
           <label class="my-2 d-block k-swal-label">評分</label>
           <div id="star-rating"></div>
